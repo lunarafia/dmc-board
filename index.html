@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width"/>
+
+        <title>Guild Fest Message Board</title>
+        
+        <link rel="stylesheet" href="style.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+
+    </head>
+    
+    <body>
+        <div class="container-main">
+            <div id="header"><h2>DMC Message Board</h2></div>
+            <div id="compose" class="box">
+                <form method="post" id="messageForm">
+                    <div class="userDetails">
+
+                        <div class="name-section">
+                            <label for="name">Name:</label>
+                            <input type="text" name="name" id="senderName" maxlength="100" placeholder="Name">
+                        </div>
+                        
+                        <div class="degree-section">
+                            <label for="degree">Degree:</label>
+                            <input type="text" name="degree" id="senderDegree" maxlength="250" placeholder="Bsc Marketing">
+                        </div>
+                    </div>
+                    
+                    <div class="message-section">
+                        <label for="message">Message:</label>
+                        <input type="text" id="messageInput">
+                        <button type="submit">Send</button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="pages"></div>
+            <div id="messageList" class="box"></div>
+        
+            </div>
+        </div>
+        <div id="footer">
+                <div id="footer-content">
+                    <p>Digital Media Club</p>
+                </div>
+        </div>
+
+        <script type="module" src="app.js"></script>
+        
+    </body>
+</html>
