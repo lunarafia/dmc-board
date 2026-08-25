@@ -9,7 +9,6 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
-// TODO: Replace the following with your app's Firebase configuration
 const firebaseConfig = {
                 apiKey: "AIzaSyAGa32-rxcCbtlFJiTHsF-q9-R2Sczw3vg",
                 authDomain: "dmc-msgboard.firebaseapp.com",
