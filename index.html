@@ -11,11 +11,25 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 
+        <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+        <link rel="manifest" href="favicon/site.webmanifest">
+
     </head>
-    
+
     <body>
+        <div class="nav-parent">
+            <nav>
+                <ul class="nav-ele">
+                    <li><a href="https://linktr.ee/uwidmc">Join DMC</a></li>
+                    <li><a href="index.html">Message Board</a></li>
+                </ul>
+            </nav>
+        </div>
+
         <div class="container-main">
-            <div id="header"><h2>DMC Message Board</h2></div>
+            <div class="header-main"><h2>DMC Message Board</h2></div>
             <div id="compose" class="box">
                 <form method="post" id="messageForm">
                     
@@ -23,12 +37,12 @@
 
                         <div class="name-section">
                             <label for="name">Name:</label>
-                            <input type="text" name="name" id="senderName" maxlength="100" placeholder="Name">
+                            <input type="text" name="name" id="senderName" maxlength="50">
                         </div>
                         
                         <div class="degree-section">
                             <label for="degree">Degree:</label>
-                            <input type="text" name="degree" id="senderDegree" maxlength="250" placeholder="Bsc Marketing">
+                            <input type="text" name="degree" id="senderDegree" maxlength="50" placeholder="Bsc Marketing">
                         </div>
                     </div>
                     
@@ -44,14 +58,12 @@
             <div id="messageList" class="box"></div>
         
             </div>
-        </div>
-        <div id="footer">
+            <div id="footer">
                 <div id="footer-content">
                     <p>Digital Media Club</p>
-                </div>
+            </div>
         </div>
-
+        </div>
         <script type="module" src="app.js"></script>
-        
     </body>
 </html>
