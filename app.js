@@ -6,7 +6,8 @@ import {
     query,
     orderByChild,
     onValue,
-    serverTimestamp
+    serverTimestamp,
+    limitToLast
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -31,9 +32,45 @@ const messageForm = document.getElementById('messageForm');
 const messageInput = document.getElementById('messageInput');
 const messageList = document.getElementById('messageList');
 
+//Paging state
+const PAGE_SIZE = 10;
+let allMessages = [];
+let visibleCount = PAGE_SIZE;
+
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+// Listen to Firebase for updates and display them automatically
+const q = query(ref(db, "messages"), orderByChild("createdAt"));
+
+onValue(q, (snapshot) => {
+    const messages = [];
+
+    snapshot.forEach((childSnapshot) => {
+        const data = childSnapshot.val();
+
+        if (data && data.messageText) {
+            messages.push({
+                id: childSnapshot.key,
+                ...data
+            });
+        }
+    });
+
+    messages.sort((a, b) => {
+        const aTime = Number(a.createdAt ?? 0);
+        const bTime = Number(b.createdAt ?? 0);
+        return bTime - aTime;
+    });
+
+    allMessages = messages;
+    renderMessages();
+}, (error) => {
+    console.error("Error loading messages ", error);
+});
 
 //Saves message to Firebase when form is submitted
-messageForm.addEventListener('submit', async (e) => {
+if (messageForm) {
+    messageForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const nameText = senderName.value.trim();
@@ -59,35 +96,70 @@ messageForm.addEventListener('submit', async (e) => {
         console.error("Error adding document ", error);
         alert("Failed to save message. Check your Realtime Database rules.");
     }
-});
+    });
+}
 
-//Listen to Firebase for updates and display them automatically
-const q = query(ref(db, "messages"), orderByChild("createdAt"));
-
-onValue(q, (snapshot) => {
+//Rendering
+function renderMessages() {
     messageList.innerHTML = '';
 
-    snapshot.forEach((childSnapshot) => {
-        const data = childSnapshot.val();
-        if (data.messageText) {
-            const div = document.createElement('div');
-            div.className = 'msg-item';
+    const itemsToShow = allMessages.slice(0, visibleCount);
 
-            const div1 = document.createElement('div');
-            div.className = ('msg-header')
-            const sender = document.createElement('strong');
-            sender.textContent = [data.name, data.degree].filter(Boolean).join(' - ');
+    itemsToShow.forEach((data) => {
+        const div = document.createElement('div');
+        div.className = 'msg-item';
 
-            const message = document.createElement('p');
-            message.textContent = data.messageText;
+        const sender = document.createElement('strong');
+        sender.textContent = [data.name, data.degree].filter(Boolean).join(' - ');
 
-            if (sender.textContent) {
-                div.appendChild(sender);
-            }
-            div.appendChild(message);
-            messageList.appendChild(div);
+        const message = document.createElement('p');
+        message.textContent = data.messageText;
+
+        if (sender.textContent) {
+            div.appendChild(sender);
         }
+        div.appendChild(message);
+        messageList.appendChild(div);
     });
-}, (error) => {
-    console.error("Error loading messages ", error);
-});
+
+    loadMoreBtn.hidden = visibleCount >= allMessages.length;
+}
+
+//Click
+if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+        visibleCount += PAGE_SIZE;
+        renderMessages();
+    });
+}
+
+// Listen to Firebase for updates and display them automatically
+// const q = query(ref(db, "messages"), orderByChild("createdAt"));
+
+// onValue(q, (snapshot) => {
+//     messageList.innerHTML = '';
+
+//     snapshot.forEach((childSnapshot) => {
+//         const data = childSnapshot.val();
+//         if (data.messageText) {
+//             const div = document.createElement('div');
+//             div.className = 'msg-item';
+
+//             const div1 = document.createElement('div');
+//             div.className = ('msg-header')
+//             const sender = document.createElement('strong');
+//             sender.textContent = [data.name, data.degree].filter(Boolean).join(' - ');
+
+//             const message = document.createElement('p');
+//             message.textContent = data.messageText;
+
+//             if (sender.textContent) {
+//                 div.appendChild(sender);
+//             }
+//             div.appendChild(message);
+//             messageList.appendChild(div);
+//         }
+//     });
+// }, (error) => {
+//     console.error("Error loading messages ", error);
+// });
